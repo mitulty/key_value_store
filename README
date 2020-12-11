@@ -1,0 +1,58 @@
+This assignment implements a performant, salable key-value server. The design implements a key-value server to which multiple clients can connect. Once connected,
+the clients continuously send requests for either getting the value associated with a key or putting in a new key-value pair. The server uses a cache
+KVCache, which is backed by a persistent storage KVStore to store key value pairs since all keys cannot be stored in memory. A server.conf file is provided which
+has the information of design parameters. The content of the file are as follows:
+
+LISTENING_PORT
+CLIENTS_PER_THREAD (Number of clients that each worker thread handles) 
+CACHE_SIZE (In number of keys)
+CACHE_REPLACEMENT (one of LRU or LFU)
+THREAD_POOL_SIZE_INITIAL (Number of worker threads to start out with)
+THREAD_POOL_GROWTH (Number of new threads to add each time when all the threads are being used)
+
+Edit the server.conf file to change these values accordingly. CACHE_REPLACEMENT implemeneted in the design is LFU only. Also the path of the server.conf is used in these
+three files in the function "read_conf_file()":
+1. server.c
+2. client_terminal_read.c
+3. client_file_read.c
+
+A Makefile is also provided in the directory which helps in building and running the project.
+Followng make commands can be used:
+1. $ make clean
+    Cleans all the object files
+2. $ make empty
+    Cleans all the request, response and database files
+2. $ make or $ make all
+    Compiles all the files to produce the eecutable.
+
+To run the server use the command below:
+    $ ./server /path_of_config_file/server.conf
+Press Ctrl+C to close the server.
+
+Followig two differente versions of clients are provided in the directory:
+1. client_terminal_read:
+It creates a single client with  the interface to accept the requests from the user using terminal. All the three options are provided to interact with the KVServer.
+To run this simply enter the command:
+
+$ ./client_terminal_read /path_of_config_file/server.conf
+
+2. client_file_read:
+In this version. A client reads a file of requests and sends them to the KVServer. It also writes the response received from the server to another file.
+Each file contains a numbe of comma separted enteries for PUT,GET and DEL as follows:
+        1,Key          ---> GET Operation
+        2,Key,Value    ---> PUT Operation
+        3,Key          ---> DEL Operation
+It also writes the total processing time taken for processing all the requests. To run this, simply enter the command:
+
+$./client_file_read /path_of_config_file/server.conf /path_of_input_file/input_file_name /path_of_output_file/output_file_name
+
+A python program ."input_src.py", is used to automate the entire process. It takes a number(say n) as input which is the numnber of clients. It then generates n input files of requests and runs 
+the client_file_read for each file parallely using multithreading. Each thread runs a shell script,"run.sh" to run the client_file_read object. To run this, use the command below:
+
+$ python3 input_src.py number_of_clients /path_of_config_file/server.conf
+
+Finally to obtain the plot of Throughput Vs load and Response Time vs Load (in requests per second) run the following code:
+
+$ python3 driver.py /path_of_output_file/output_file_name 
+
+Note: Run the client files when server setups successfully( a message is shown). Also the report comtains some images that show how to run the code.
