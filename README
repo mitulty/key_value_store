@@ -51,7 +51,7 @@ the client_file_read for each file parallely using multithreading. Each thread r
 
 $ python3 input_src.py number_of_clients /path_of_config_file/server.conf
 
-Finally to obtain the plot of Throughput Vs load and Response Time vs Load (in requests per second) run the following code:
+Finally to obtain the plot of Throughput Vs Load and Response Time vs Load (in requests per second) run the following code:
 
 $ python3 driver.py /path_of_output_file/output_file_name 
 
